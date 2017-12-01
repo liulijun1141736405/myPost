@@ -8,7 +8,12 @@
               <el-table-column prop="goodsName" label="商品"></el-table-column> 
               <el-table-column prop="price" width="70" label="金额"></el-table-column>    
               <el-table-column prop="count" width="50" label="量"></el-table-column>    
-              <el-table-column label="操作" width="100" fixed="right">操作</el-table-column>
+              <el-table-column label="操作" width="100" fixed="right">
+                  <template slot-scope="scope">
+                    <el-button type="text" size="small">删除</el-button>
+                    <el-button type="text" size="small">增加</el-button>
+                  </template>
+              </el-table-column>
             </el-table>  
             <div class="orderbtn">
               <el-button type="warning" size="mini">挂单</el-button>
