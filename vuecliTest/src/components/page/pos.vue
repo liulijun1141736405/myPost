@@ -114,7 +114,17 @@ export default {
         ],
         type3Goods:[
             
-        ]
+        ],
+        getAllMoney:function(){
+           //总数量
+        this.totalCount=0;
+        //总价格
+        this.totalMoney=0;
+        this.tableData.forEach((e)=>{
+           this.totalMoney+=e.count*e.price;
+           this.totalCount+=e.count;
+        })
+        }
     }
    },
    //创建就执行
@@ -150,10 +160,6 @@ export default {
    methods:{
      addtableData:function(ofgoods){
         //已存在数量+1 不存在puch一条商品
-        //总数量
-        this.totalCount=0;
-        //总价格
-        this.totalMoney=0;
         var isHave=false;
         this.tableData.forEach(function(e){
           if(e.goodsId==ofgoods.goodsId){
@@ -171,14 +177,11 @@ export default {
            this.tableData.push(newGoods);
         }
         //计算
-        this.tableData.forEach((e)=>{
-          debugger;
-           this.totalMoney+=e.count*e.price;
-           this.totalCount+=e.count;
-        })
+        this.getAllMoney();
      },
      delgoods:function(data){
-
+          this.tableData=this.tableData.filter(e=>e.goodsId!=data.goodsId);
+           this.getAllMoney();
      }
     }
    
