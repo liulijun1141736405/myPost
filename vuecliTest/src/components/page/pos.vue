@@ -4,17 +4,20 @@
       <el-col :span='7' class="post-order" id="order-col">
         <el-tabs v-model="activeName"  type="border-card">
           <el-tab-pane label="点餐" name="first">
-            <el-table  :data="tableData" border show-summary  style="width: 100%">
+            <el-table  :data="tableData" border style="width: 100%">
               <el-table-column prop="goodsName" label="商品"></el-table-column> 
               <el-table-column prop="price" width="70" label="金额"></el-table-column>    
               <el-table-column prop="count" width="50" label="量"></el-table-column>    
               <el-table-column label="操作" width="100" fixed="right">
                   <template slot-scope="scope">
-                    <el-button type="text" size="small">删除</el-button>
-                    <el-button type="text" size="small">增加</el-button>
+                    <el-button type="text" size="small" @click="delgoods(scope.row)">删除</el-button>
+                    <el-button type="text" size="small" @click="addtableData(scope.row)">增加</el-button>
                   </template>
               </el-table-column>
-            </el-table>  
+            </el-table>              
+              <div>
+                数量：{{totalCount}}     价格：{{totalMoney}}
+              </div>
             <div class="orderbtn">
               <el-button type="warning" size="mini">挂单</el-button>
               <el-button type="danger" size="mini">删除</el-button>
@@ -32,11 +35,10 @@
         <div class="often-goods">
           <div class="title">常用商品</div>
           <div class="often-goods-list">
-
             <ul>
-              <li v-for="item in oftenGoods">
-                <span>{{item.goodsName}}</span>
-                <span class="o-price">￥{{item.price}}元</span>
+              <li v-for="ofgoods in oftenGoods" @click="addtableData(ofgoods)">
+                <span>{{ofgoods.goodsName}}</span>
+                <span class="o-price">￥{{ofgoods.price}}元</span>
               </li>
 
             </ul>
@@ -46,7 +48,7 @@
         <el-tabs>
           <el-tab-pane label="汉堡">
             <ul class='cookList'>
-                <li  v-for="item in type0Goods">
+                <li  v-for="item in type0Goods" @click="addtableData(item)">
                     <span class="foodImg"><img :src="item.goodsImg" width="100%"></span>
                     <span class="foodName">{{item.goodsName}}</span>
                     <span class="foodPrice">￥{{item.price}}元</span>
@@ -55,7 +57,7 @@
           </el-tab-pane>
             <el-tab-pane label="小食">
               <ul class='cookList'>
-                  <li  v-for="item in type1Goods">
+                  <li  v-for="item in type1Goods" @click="addtableData(item)">
                       <span class="foodImg"><img :src="item.goodsImg" width="100%"></span>
                       <span class="foodName">{{item.goodsName}}</span>
                       <span class="foodPrice">￥{{item.price}}元</span>
@@ -64,7 +66,7 @@
           </el-tab-pane>
           <el-tab-pane label="饮料">
             <ul class='cookList'>
-                <li  v-for="item in type2Goods">
+                <li  v-for="item in type2Goods" @click="addtableData(item)">
                     <span class="foodImg"><img :src="item.goodsImg" width="100%"></span>
                     <span class="foodName">{{item.goodsName}}</span>
                     <span class="foodPrice">￥{{item.price}}元</span>
@@ -73,7 +75,7 @@
           </el-tab-pane>
           <el-tab-pane label="套餐">
             <ul class='cookList'>
-                <li  v-for="item in type3Goods">
+                <li  v-for="item in type3Goods" @click="addtableData(item)">
                     <span class="foodImg"><img :src="item.goodsImg" width="100%"></span>
                     <span class="foodName">{{item.goodsName}}</span>
                     <span class="foodPrice">￥{{item.price}}元</span>
@@ -94,27 +96,10 @@ export default {
    data() {
       return {
         activeName: 'first',
-        tableData: [{
-          
-          goodsName: '可口可乐',
-          price: 8,
-          count:1
-        }, {
-          
-          goodsName: '香辣鸡腿堡',
-          price: 15,
-          count:1
-        }, {
-         
-          goodsName: '爱心薯条',
-          price: 8,
-          count:1
-        }, {
-         
-          goodsName: '甜筒',
-          price: 8,
-          count:1
-        }],
+        totalCount:0,
+        totalMoney:0,
+        tableData: [
+        ],
         oftenGoods:[
          
         ],
@@ -160,7 +145,43 @@ export default {
    mounted:function(){
      var orderHeight = document.body.clientHeight;
      document.getElementById("order-col").style.height=orderHeight+'px';
-   }
+   },
+   
+   methods:{
+     addtableData:function(ofgoods){
+        //已存在数量+1 不存在puch一条商品
+        //总数量
+        this.totalCount=0;
+        //总价格
+        this.totalMoney=0;
+        var isHave=false;
+        this.tableData.forEach(function(e){
+          if(e.goodsId==ofgoods.goodsId){
+            isHave=true;
+            return false;
+          }
+        })
+        if(isHave){
+          //存在数目+1
+          var arr = this.tableData.filter(a=>a.goodsId==ofgoods.goodsId);
+          arr[0].count++;
+        }else{
+          //puch一条商品
+          var newGoods = {goodsId:ofgoods.goodsId,count:1,goodsName:ofgoods.goodsName,price:ofgoods.price};
+           this.tableData.push(newGoods);
+        }
+        //计算
+        this.tableData.forEach((e)=>{
+          debugger;
+           this.totalMoney+=e.count*e.price;
+           this.totalCount+=e.count;
+        })
+     },
+     delgoods:function(data){
+
+     }
+    }
+   
 }
 </script>
 

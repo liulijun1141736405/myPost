@@ -5,6 +5,8 @@ import App from './App'
 import router from './router'
 import elenemtui from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import "babel-polyfill"
+
 Vue.config.productionTip = false
 Vue.use(elenemtui);
 /* eslint-disable no-new */
