@@ -1,9 +1,12 @@
 <template>
   <div class="leftnav">
      <ul>
-         <li v-for="item in navitems">
-             <i :class="item.className"></i>
-             <div>{{item.name}}</div>
+         <li v-for="item in navitems" >
+             <router-link :to="item.url">
+                <i :class="item.className"></i>
+                <div>{{item.name}}</div>
+             </router-link>
+             
          </li>
      </ul>
   </div>
@@ -18,26 +21,34 @@ export default {
       navitems:[
         {
             name:"购物车",
-            className:"icon iconfont icon-tianmaochaoshigouwuche"
+            className:"icon iconfont icon-tianmaochaoshigouwuche",
+            url:"/"
         },
         {
             name:"会员卡",
-            className:"icon iconfont icon-huiyuanqia"
+            className:"icon iconfont icon-huiyuanqia",
+            url:"/vip"
         },
         {
             name:"商城",
-            className:"icon iconfont icon-kafei"
+            className:"icon iconfont icon-kafei",
+            url:"/helloworld"
         },
         {
             name:"活动",
-            className:"icon iconfont icon-huodongyouxian"
+            className:"icon iconfont icon-huodongyouxian",
+            url:"/vip"
         },
         {
             name:"设置",
-            className:"icon iconfont icon-setup_fill"
+            className:"icon iconfont icon-setup_fill",
+            url:"/vip"
         },
       ]
     }
+  },
+  methods:{
+       
   }
 }
 </script>
